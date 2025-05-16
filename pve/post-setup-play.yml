@@ -13,7 +13,6 @@
         state: absent
         update_cache: false
 
-  tasks:
     - name: Disable pve-enterprise Ceph repository
       apt_repository:
         repo: "deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise"

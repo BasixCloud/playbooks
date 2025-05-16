@@ -1,0 +1,26 @@
+---
+- name: PVE Create User and su
+  hosts: pve
+  remote_user: root
+
+  vars_prompt:
+    - name: new_password
+      prompt: "Enter new password"
+
+  tasks:
+    - name: Add wheel group
+      group: name=wheel
+    
+    - name: Add user
+      user: 
+        name: "{{ ansible_user }}"
+        update_password: always
+        password: "{{ new_password | password_hash('sha512') }}"
+        group: wheel
+
+    - name: Enable wheel PAM
+      lineinfile:
+        dest: /etc/pam.d/su
+        regexp: '^#\s*auth       sufficient pam_wheel.so trust'
+        line: 'auth       sufficient pam_wheel.so trust'
+
