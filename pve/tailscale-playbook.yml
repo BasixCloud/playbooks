@@ -1,0 +1,42 @@
+---
+- name: Install Tailscale and connect to tailnet
+  hosts: pve
+  become: true
+  become_method: su
+  vars_prompt:
+    - name: tailscale_auth_key
+      prompt: Type your Tailscale Auth Key
+      private: true
+
+  tasks:
+    - name: Add Tailscale GPG key
+      apt_key:
+        url: https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg
+        state: present
+
+    - name: Add Tailscale repository
+      apt_repository:
+        repo: "deb https://pkgs.tailscale.com/stable/debian bookworm main"
+        state: present
+        filename: tailscale
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Tailscale
+      apt:
+        name: tailscale
+        state: present
+
+    - name: Start Tailscale service
+      systemd:
+        name: tailscaled
+        state: started
+        enabled: yes
+
+    - name: Connect to Tailscale network
+      command: "tailscale up --authkey={{ tailscale_auth_key }}"
+      register: tailscale_result
+      changed_when: "'Success' in tailscale_result.stdout"
+      failed_when: tailscale_result.rc != 0 and 'already authenticated' not in tailscale_result.stderr
