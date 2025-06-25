@@ -1,0 +1,2 @@
+- include_tasks: tasks/post-setup.yml
+- include_tasks: tasks/tailscale.yml

@@ -1,0 +1,10 @@
+import sites-enabled/*
+
+{
+    email basix@basix.cloud
+    skip_install_trust
+}
+
+basix.cloud {
+    respond "Hello, World!"
+}

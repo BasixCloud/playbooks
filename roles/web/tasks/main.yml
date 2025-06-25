@@ -1,0 +1,18 @@
+- name: Install on Red Hat systems
+  include_tasks: redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Sync configuration
+  synchronize:
+    src: caddy
+    dest: /etc/caddy
+    mode: push
+  notify: reload caddy
+  become: true
+
+- name: Ensure Caddy is running
+  service:
+    name: caddy
+    state: started
+    enabled: true
+  become: true

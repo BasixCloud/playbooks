@@ -1,0 +1,15 @@
+---
+- name: Setup variables
+  include_vars: vars.yml
+
+- name: Install on Red Hat systems
+  include_tasks: setup-redhat.yml
+
+- name: Check if PostgreSQL database is initialized
+  stat:
+    path: /var/lib/pgsql/data/PG_VERSION
+  register: pg_version_file
+
+- name: Initialize PostgreSQL database if not initialized
+  command: /usr/bin/postgresql-setup initdb
+  when: pg_version_file.stat.exists == false

@@ -1,0 +1,12 @@
+- name: Install Caddy repository
+  community.general.copr:
+    name: "@caddy/caddy"
+    chroot: epel-{{ ansible_distribution_major_version }}-{{ ansible_userspace_architecture }}
+    includepkgs:
+      - caddy
+  become: true
+
+- name: Install Caddy
+  package:
+    name: caddy
+  become: true

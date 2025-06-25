@@ -1,0 +1,13 @@
+---
+- name: Add PostgreSQL repository
+  dnf:
+    name: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
+    state: present
+- name: Install PostgreSQL 17
+  dnf:
+    name:
+      - "postgresql17-server"
+      - "postgresql17-contrib"
+    state: present
+    enablerepo: pgdg17
+    exclude: python-unversioned-command

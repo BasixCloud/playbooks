@@ -1,0 +1,16 @@
+---
+- hosts: pve
+  become: true
+  become_method: su
+  roles:
+    - pve
+
+- hosts: web
+  roles:
+    - common
+    - web
+
+- hosts: db
+  roles:
+    - common
+    - db
